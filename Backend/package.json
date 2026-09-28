@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Deepen09-byte/Snitch#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^18.0.4",
     "express": "^5.2.1",
