@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hook/useauth';
 
 export default function Register() {
   const [password, setPassword] = useState('');
+  const navigate = useNavigate()
+
+  const { handleRegister } = useAuth()
 
   const getPasswordScore = (val) => {
     if (!val || val.length === 0) return 0;
@@ -15,12 +19,12 @@ export default function Register() {
   };
 
   const score = getPasswordScore(password);
-  
+
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="bg-surface text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col lg:flex-row relative overflow-hidden">
-      
+
       {/* Left Column: Form */}
       <div className="w-full lg:w-1/2 flex flex-col h-screen overflow-y-auto relative z-10 scrollbar-none [&::-webkit-scrollbar]:hidden">
         {/* Ambient Golden Radiance in Background for Mobile/Tablet */}
@@ -58,7 +62,28 @@ export default function Register() {
           </div>
 
           {/* Registration Form */}
-          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+          <form
+            className="space-y-5"
+            onSubmit={async (e) => {
+              e.preventDefault()
+
+              console.log("🔥 FORM SUBMITTED");
+
+              try {
+                await handleRegister({
+                  email: e.target.email.value,
+                  contact: e.target.phone.value,
+                  password: e.target.password.value,
+                  fullName: e.target.name.value,
+                  isSeller: e.target.is_seller.checked
+                })
+
+                navigate("/")
+              } catch (error) {
+                console.error("Registration failed:", error)
+              }
+            }}
+          >
             {/* 1. Full Name Field */}
             <div className="space-y-2">
               <label className="block font-label-md text-label-md font-semibold text-on-surface-variant" htmlFor="full_name">
@@ -112,15 +137,15 @@ export default function Register() {
               </div>
               <div className="input-focus-glow relative flex items-center bg-surface-container-low rounded-xl border border-outline-variant/40 hover:border-outline-variant/80 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-surface shadow-sm">
                 <span className="material-symbols-outlined text-outline pl-4 pr-2 text-[22px] pointer-events-none select-none">lock</span>
-                <input 
-                  className="w-full bg-transparent border-0 focus:ring-0 text-on-surface placeholder:text-outline/50 font-body-lg text-body-lg py-3.5 pr-12 pl-1 outline-none rounded-xl" 
-                  id="user_password" 
-                  name="password" 
+                <input
+                  className="w-full bg-transparent border-0 focus:ring-0 text-on-surface placeholder:text-outline/50 font-body-lg text-body-lg py-3.5 pr-12 pl-1 outline-none rounded-xl"
+                  id="user_password"
+                  name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••" 
-                  required 
-                  type={showPassword ? "text" : "password"} 
+                  placeholder="••••••••••••"
+                  required
+                  type={showPassword ? "text" : "password"}
                 />
                 <button aria-label="Toggle password visibility" className="absolute right-3 text-outline hover:text-primary transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-surface-container-highest" id="togglePasswordBtn" onClick={() => setShowPassword(!showPassword)} type="button">
                   <span className="material-symbols-outlined text-[22px]" id="pwdEyeIcon">{showPassword ? "visibility_off" : "visibility"}</span>
@@ -167,8 +192,8 @@ export default function Register() {
 
             {/* Terms & Privacy */}
             <p className="text-sm text-outline/80 text-center px-4 pt-2 font-medium">
-              By continuing, you agree to Snitch's 
-              <Link className="text-primary hover:text-primary-container hover:underline underline-offset-4 ml-1.5 transition-colors" to="/terms">Terms of Service</Link> & 
+              By continuing, you agree to Snitch's
+              <Link className="text-primary hover:text-primary-container hover:underline underline-offset-4 ml-1.5 transition-colors" to="/terms">Terms of Service</Link> &
               <Link className="text-primary hover:text-primary-container hover:underline underline-offset-4 ml-1.5 transition-colors" to="/privacy">Privacy Policy</Link>.
             </p>
 
@@ -207,7 +232,7 @@ export default function Register() {
           {/* Secondary Navigation */}
           <div className="mt-10 mb-6 text-center">
             <p className="text-base text-on-surface-variant font-medium">
-              Already have an account? 
+              Already have an account?
               <Link className="text-primary font-bold hover:text-primary-container transition-colors inline-flex items-center gap-1 active:scale-95 ml-2" to="/signin">
                 <span>Sign In</span>
                 <span className="material-symbols-outlined text-[18px]">chevron_right</span>
@@ -221,11 +246,11 @@ export default function Register() {
       <div className="hidden lg:flex lg:w-1/2 relative bg-surface-container-high overflow-hidden items-center justify-center border-l border-outline-variant/10 shadow-2xl">
         {/* Deep ambient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high via-surface-container to-surface opacity-90"></div>
-        
+
         {/* Abstract decorative elements */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#fbbf24] rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#f59e0b] rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
-        
+
         {/* Dynamic geometric accents */}
         <div className="absolute top-10 right-10 w-32 h-32 border border-[#fbbf24]/20 rounded-full"></div>
         <div className="absolute bottom-20 left-20 w-64 h-64 border border-[#f59e0b]/10 rounded-full"></div>
@@ -235,27 +260,27 @@ export default function Register() {
           <div className="w-24 h-24 mb-10 rounded-2xl bg-gradient-to-br from-[#fbbf24] to-[#d97706] shadow-[0_0_50px_rgba(245,158,11,0.5)] flex items-center justify-center transform rotate-3 hover:rotate-6 transition-transform duration-500">
             <span className="material-symbols-outlined text-[48px] text-[#09090b]">diamond</span>
           </div>
-          
+
           <h2 className="text-4xl xl:text-5xl font-extrabold tracking-tight text-on-surface mb-6 leading-tight">
-            Elevate Your <br/> 
+            Elevate Your <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fbbf24] to-[#f59e0b]">Wardrobe.</span>
           </h2>
-          
+
           <p className="text-lg xl:text-xl text-on-surface-variant font-medium leading-relaxed mb-12 max-w-md">
             Join Snitch to discover premium collections, exclusive offers, and a personalized shopping experience tailored for the modern aesthetic.
           </p>
-          
+
           <div className="flex items-center gap-5 bg-surface-container/50 backdrop-blur-sm py-3 px-6 rounded-full border border-outline-variant/20 shadow-lg">
             <div className="flex -space-x-4">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="w-12 h-12 rounded-full border-2 border-surface-container-high bg-surface-container flex items-center justify-center overflow-hidden">
-                   <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${i}&backgroundColor=transparent`} alt="User" className="w-full h-full object-cover opacity-80" />
+                  <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${i}&backgroundColor=transparent`} alt="User" className="w-full h-full object-cover opacity-80" />
                 </div>
               ))}
             </div>
             <div className="text-left">
               <div className="flex items-center gap-1 text-[#fbbf24] mb-0.5">
-                {[1,2,3,4,5].map(star => <span key={star} className="material-symbols-outlined text-[14px] fill-current">star</span>)}
+                {[1, 2, 3, 4, 5].map(star => <span key={star} className="material-symbols-outlined text-[14px] fill-current">star</span>)}
               </div>
               <p className="text-sm text-on-surface-variant font-semibold">Over <span className="text-on-surface">100k+</span> fashion enthusiasts</p>
             </div>
