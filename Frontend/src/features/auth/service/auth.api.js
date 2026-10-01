@@ -24,8 +24,29 @@ export async function register({
 
         return response.data;
     } catch (error) {
-        console.log("BACKEND RESPONSE:", error.response?.data);
-        console.log("STATUS:", error.response?.status);
-        throw error;
+        if (error.response) {
+            const { message, field } = error.response.data;
+            return { success: false, message, field };
+        }
+        return { success: false, message: "Network error", field: null };
+    }
+}
+
+export async function login({
+    email,
+    password,
+}) {
+    try {
+        const response = await authApiInstance.post("/login", {
+            email,
+            password,
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            const { message, field } = error.response.data;
+            return { success: false, message, field };
+        }
+        return { success: false, message: "Network error", field: null };
     }
 }

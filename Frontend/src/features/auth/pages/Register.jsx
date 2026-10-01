@@ -33,13 +33,13 @@ export default function Register() {
         {/* Top Navigation Shell */}
         <header className="sticky top-0 z-30 bg-surface/80 backdrop-blur-md border-b border-outline-variant/20 dark:border-outline-variant/20 w-full">
           <div className="flex justify-between items-center w-full px-6 h-16">
-            <Link to="/" aria-label="Go back" className="text-primary dark:text-primary p-2 -ml-2 rounded-lg hover:bg-surface-container hover:text-primary-container transition-colors active:scale-95 duration-150 flex items-center justify-center">
+            {/* <Link to="/" aria-label="Go back" className="text-primary dark:text-primary p-2 -ml-2 rounded-lg hover:bg-surface-container hover:text-primary-container transition-colors active:scale-95 duration-150 flex items-center justify-center">
               <span className="material-symbols-outlined text-[24px]">arrow_back</span>
-            </Link>
+            </Link> */}
             <h1 className="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight lg:hidden">
               Snitch
             </h1>
-            <Link to="/signin" className="font-label-lg text-label-lg text-primary dark:text-primary font-semibold hover:text-primary-container transition-colors active:scale-95 duration-150">
+            <Link to="/login" className="font-label-lg text-label-lg text-primary dark:text-primary font-semibold hover:text-primary-container transition-colors active:scale-95 duration-150">
               Sign In
             </Link>
           </div>
@@ -65,10 +65,7 @@ export default function Register() {
           <form
             className="space-y-5"
             onSubmit={async (e) => {
-              e.preventDefault()
-
-              console.log("🔥 FORM SUBMITTED");
-
+              e.preventDefault();
               try {
                 await handleRegister({
                   email: e.target.email.value,
