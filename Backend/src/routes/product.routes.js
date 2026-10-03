@@ -1,9 +1,17 @@
 import express from "express";
 import {authSeller} from "../middlewares/auth.middleware.js";
 import { createProduct } from "../controllers/product.contorller.js";
+import multer from "multer";
+
+const upload = multer ({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
+    }
+})
 
 const router = express.Router();
 
-router.post("/", authSeller, createProduct);
+router.post("/", authSeller, upload.array('images', 4), createProduct);
 
 export default router;
